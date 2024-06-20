@@ -13,17 +13,33 @@ const writingPrompt = document.createElement("div");
 const textarea = document.createElement("textarea");
 
 //initializations
-let string = "This is a typing test.";
+// https://gist.github.com/nasrulhazim/54b659e43b1035215cd0ba1d4577ee80
+const getQuotes = () => {
+  fetch("./quotes.json")
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      for (let index = 0; index < 10; index++) {
+        let rand = Math.floor(Math.random() * 100);
+        writingPrompt.textContent += data.quotes[rand].quote + " ";
+      }
+    })
+    .catch((error) => console.error("Unable to fetch data:", error));
+};
+getQuotes();
+let string = "rnaodm random random";
 let minutes = 0;
 let seconds = 60;
 let intervalID;
+let isBtnDisabled = false;
 
 //attributes
 writingPrompt.setAttribute("type", "text");
-writingPrompt.textContent = string;
 
 textarea.setAttribute("cols", 50);
 textarea.setAttribute("rows", 20);
+textarea.disabled = true; //can't start typing before timer
 minutesdiv.textContent = "1:";
 secondsdiv.textContent = "00";
 
@@ -35,32 +51,54 @@ const calculateWPM = () => {
   const input = textarea.value;
   let testArr = test.split(" ");
   let inputArr = input.split(" ");
-  inputArr.forEach((word) => {
-    for (const i in testArr) {
-      wordPrompt = testArr[i];
-      if (word === wordPrompt) {
-        count++;
-      }
-      //add changing color of mistyping here
+  for (let i = 0; i < inputArr.length; i++) {
+    word = inputArr[i];
+    wordPrompt = testArr[i];
+    if (word === wordPrompt) {
+      //count word if input and prompt words are equal
+      count++;
     }
-  });
-  resultdiv.innerHTML = count;
+    //add changing color of mistyping here
+  }
+
+  resultdiv.innerHTML = count + " WPM";
 };
 
 const updateTimer = () => {
   if (seconds === 0) {
-    clearInterval(intervalID);
-    calculateWPM();
+    //when times up
+    clearInterval(intervalID); //stop timer
+    calculateWPM(); //calculate
+    textarea.disabled = true; //can't type futher
+    isBtnDisabled = false;
   }
   secondsdiv.textContent = seconds;
   seconds--;
 };
 
 const handleTimer = () => {
-  seconds = 60;
-  intervalID = setInterval(updateTimer, 50);
+  textarea.disabled = false;
+  textarea.focus();
+  textarea.value = "";
+  if (!isBtnDisabled) {
+    seconds = 60;
+    intervalID = setInterval(updateTimer, 500);
+  }
+  isBtnDisabled = true; //can't click on timer during countdown to prevent weird setInterval
 };
 
+//appends
+// timerdiv.appendChild(minutesdiv);
+
+btn.addEventListener("click", handleTimer);
+
+//appends to app
+app.appendChild(timerdiv);
+app.appendChild(btn);
+app.appendChild(resultdiv);
+app.appendChild(writingPrompt);
+app.appendChild(textarea);
+timerdiv.appendChild(secondsdiv);
 //css
 for (const iterator of all) {
   Object.assign(iterator.style, {
@@ -85,15 +123,3 @@ Object.assign(writingPrompt.style, {
 Object.assign(textarea.style, {
   backgroundColor: "red",
 });
-
-//appends
-// timerdiv.appendChild(minutesdiv);
-timerdiv.appendChild(secondsdiv);
-btn.addEventListener("click", handleTimer);
-
-//appends to app
-app.appendChild(timerdiv);
-app.appendChild(btn);
-app.appendChild(resultdiv);
-app.appendChild(writingPrompt);
-app.appendChild(textarea);
