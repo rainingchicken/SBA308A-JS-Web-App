@@ -17,6 +17,8 @@ const textarea = document.createElement("textarea");
 const testcontainer = document.createElement("div");
 const testrow = document.createElement("div");
 const footer = document.createElement("footer");
+const wrong = "#BD8E83";
+
 //initializations
 // https://gist.github.com/nasrulhazim/54b659e43b1035215cd0ba1d4577ee80
 const getQuotes = () => {
@@ -45,12 +47,13 @@ nav.innerHTML = `<nav class="navbar bg-transparent ">
     <a class="navbar-brand text-black" href="../pages/index.html">Home</a>
     <div id="accountbtn">
     <a href = '../pages/login.html' type="button" class="btn  text-black" style='border: 1px solid #749EB2'>Login</a>
-    <a type="button" class="btn text-black"style='background-color: #749EB2'>Sign Up</a>
+    <a href='#' type="button" class="btn text-black"style='background-color: #749EB2' >Sign Up</a>
     </div>
   </div>
 </nav>`;
 textarea.disabled = true; //can't start typing before timer
 writingPrompt.setAttribute("type", "text");
+writingPrompt.setAttribute("id", "writingPrompt");
 writingPrompt.textContent =
   "The prompt in which you will copy via typing will appear here. Try to type as fast and accurate as you can!";
 textarea.setAttribute("placeholder", "Click START and type here!");
@@ -76,21 +79,20 @@ const calculateWPM = () => {
   let count = 0;
   const test = writingPrompt.textContent;
   const input = textarea.value;
-  let testArr = test.split(" ");
-  let inputArr = input.split(" ");
+  const testArr = test.split(" ");
+  const inputArr = input.split(" ");
+  let w = document.getElementById("writingPrompt").innerHTML;
   for (let i = 0; i < inputArr.length; i++) {
-    word = inputArr[i];
-    wordPrompt = testArr[i];
-    if (word === wordPrompt) {
+    let word = testArr[i];
+    if (inputArr[i] == testArr[i]) {
       //count word if input and prompt words are equal
       count++;
     } else {
-      writingPrompt.innerHTML = writingPrompt.innerHTML.replace(
-        wordPrompt,
-        `<span style='color: #BD8E83'>${wordPrompt}</span>`
-      );
+      count += 0;
+      w = w.replace(word, `<span style='color:${wrong}'>${word}</span>`);
     }
   }
+  document.getElementById("writingPrompt").innerHTML = w;
   resultdiv.innerHTML = count + " WPM";
 };
 
@@ -128,13 +130,19 @@ const handleTimer = () => {
   getQuotes();
   if (!isBtnDisabled) {
     seconds = 59;
-    intervalID = setInterval(updateTimer, 50);
+    intervalID = setInterval(updateTimer, 500);
   }
   isBtnDisabled = true; //can't click on timer during countdown to prevent weird setInterval
 };
 
+//listeners
 btn.addEventListener("click", handleTimer);
-
+nav.addEventListener("click", function (event) {
+  // event.preventDefault();
+  if (event.target == this.lastchild) {
+    alert("Sign ups are unavaiable at this time.");
+  }
+});
 //appends to app
 header.appendChild(nav);
 timerdiv.appendChild(minutesdiv);
@@ -154,7 +162,8 @@ app.appendChild(footer);
 //css
 const testClass = document.querySelectorAll(".test");
 const fontClass = document.querySelectorAll(".font");
-const footeranchor = document.querySelector("#footeranchor");
+const whiteClass = document.querySelectorAll(".white");
+const redClass = document.querySelectorAll(".red");
 //https://www.canva.com/colors/color-palettes/classic-travel/
 const bgColor = "#E9DAC4";
 const boxColor = "white";
@@ -176,10 +185,6 @@ document.body.style.backgroundColor = bgColor;
 Object.assign(app.style, {
   marginTop: "0",
 });
-
-// Object.assign(nav.style, {
-//   background: "transparent",
-// });
 
 for (const i in all) {
   Object.assign(all[i].style, {
@@ -254,3 +259,13 @@ Object.assign(footeranchor.style, {
   textDecoration: "none",
   color: btnColor,
 });
+for (const i of whiteClass) {
+  Object.assign(i.style, {
+    color: "white",
+  });
+}
+for (const i of redClass) {
+  Object.assign(i.style, {
+    color: wrong,
+  });
+}
