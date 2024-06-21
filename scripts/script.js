@@ -3,6 +3,8 @@ const app = document.getElementById("app");
 const all = app.childrens;
 
 //create elemetns
+const header = document.createElement("header");
+const nav = document.createElement("nav");
 const h1 = document.createElement("h1");
 const timerdiv = document.createElement("div");
 const minutesdiv = document.createElement("span");
@@ -18,7 +20,7 @@ const footer = document.createElement("footer");
 //initializations
 // https://gist.github.com/nasrulhazim/54b659e43b1035215cd0ba1d4577ee80
 const getQuotes = () => {
-  fetch("./quotes.json")
+  fetch("../quotes.json")
     .then((res) => {
       return res.json();
     })
@@ -38,6 +40,15 @@ let intervalID;
 let isBtnDisabled = false;
 
 //attributes
+nav.innerHTML = `<nav class="navbar bg-transparent ">
+  <div class="container-fluid style='justify-content: space-between'">
+    <a class="navbar-brand text-black" href="../pages/index.html">Home</a>
+    <div id="accountbtn">
+    <a href = '../pages/login.html' type="button" class="btn  text-black" style='border: 1px solid #749EB2'>Login</a>
+    <a type="button" class="btn text-black"style='background-color: #749EB2'>Sign Up</a>
+    </div>
+  </div>
+</nav>`;
 textarea.disabled = true; //can't start typing before timer
 writingPrompt.setAttribute("type", "text");
 writingPrompt.textContent =
@@ -48,7 +59,9 @@ btn.textContent = "START";
 minutesdiv.textContent = "01:";
 secondsdiv.textContent = "00";
 resultdiv.textContent = "Result";
-footer.innerHTML = `<a>https://github.com/rainingchicken/SBA316-DOM-Typing-Test</a>`;
+footer.innerHTML = `<a id='footeranchor' href='https://github.com/rainingchicken/SBA316-DOM-Typing-Test'> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+</svg> rainingchicken</a>`;
 
 //class
 writingPrompt.classList.add("test");
@@ -94,6 +107,7 @@ const updateTimer = () => {
     calculateWPM(); //calculate
     textarea.disabled = true; //can't type futher
     isBtnDisabled = false;
+    window.scrollTo({ top: 0, behavior: "smooth" }); //scroll to top pf page to see score
   }
   if (seconds < 10) {
     seconds = "0" + seconds;
@@ -122,22 +136,25 @@ const handleTimer = () => {
 btn.addEventListener("click", handleTimer);
 
 //appends to app
+header.appendChild(nav);
 timerdiv.appendChild(minutesdiv);
 timerdiv.appendChild(secondsdiv);
 buttonsdiv.appendChild(btn);
 testrow.appendChild(writingPrompt);
 testrow.appendChild(textarea);
 testcontainer.appendChild(testrow);
+app.appendChild(header);
 app.appendChild(h1);
 app.appendChild(timerdiv);
 app.appendChild(buttonsdiv);
 app.appendChild(resultdiv);
 app.appendChild(testcontainer);
 app.appendChild(footer);
+
 //css
 const testClass = document.querySelectorAll(".test");
 const fontClass = document.querySelectorAll(".font");
-
+const footeranchor = document.querySelector("#footeranchor");
 //https://www.canva.com/colors/color-palettes/classic-travel/
 const bgColor = "#E9DAC4";
 const boxColor = "white";
@@ -160,11 +177,13 @@ Object.assign(app.style, {
   marginTop: "0",
 });
 
+// Object.assign(nav.style, {
+//   background: "transparent",
+// });
+
 for (const i in all) {
   Object.assign(all[i].style, {
     boxSizing: "border-box",
-    // display: "flex",
-    // flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
   });
@@ -209,7 +228,6 @@ Object.assign(resultdiv.style, {
 });
 for (const i of testClass) {
   Object.assign(i.style, {
-    //background: boxTexture,
     backgroundColor: boxColor,
     backgroundBlendMode: "multiply",
     padding: "2em",
@@ -223,7 +241,16 @@ for (const i of testClass) {
 Object.assign(footer.style, {
   textAlign: "center",
   margin: "0 auto",
-  width: "100%",
   bottom: "0",
-  backgroundColor: "red",
+});
+
+Object.assign(footer.style, {
+  textAlign: "center",
+  margin: "0 auto",
+  bottom: "0",
+  padding: "1em",
+});
+Object.assign(footeranchor.style, {
+  textDecoration: "none",
+  color: btnColor,
 });
