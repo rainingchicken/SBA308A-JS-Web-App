@@ -95,27 +95,38 @@ testrow.classList.add("row");
 testcontainer.classList.add("container");
 app.classList.add("font");
 
+// let newhtml = "";
+// let string = "this is a test";
+// let inputttt = "this is rfbjn test";
+// let sarr = string.trim().split(/\s+/);
+// let iarr = inputttt.trim().split(/\s+/);
+// for (let i = 0; i < iarr.length; i++) {
+//   if (iarr[i] != sarr[i]) {
+//     newhtml += `<span style="color: red;">${sarr[i]}</span>`;
+//   } else {
+//     newhtml += `<span style="color: blue;">${sarr[i]}</span>`;
+//   }
+// }
+
 const calculateWPM = () => {
   let count = 0;
+  let newhtml = "";
   const test = writingPrompt.textContent;
   const input = textarea.value;
-  const testArr = test.split(" ");
-  const inputArr = input.split(" ");
-  let w = document.getElementById("writingPrompt").innerHTML;
+  const testArr = test.trim().split(/\s+/);
+  const inputArr = input.trim().split(/\s+/);
   for (let i = 0; i < inputArr.length; i++) {
-    let word = testArr[i];
-    if (inputArr[i] == testArr[i]) {
-      //count word if input and prompt words are equal
-      count++;
-    } else {
+    if (inputArr[i] != testArr[i]) {
       count += 0;
-      w = w.replace(word, `<span style='color:${wrong}'>${word}</span>`);
+      newhtml += `<span style="color: ${wrong};">${testArr[i]}</span>` + " ";
+    } else {
+      count++;
+      newhtml += `<span style="color: white;">${testArr[i]}</span>` + " ";
     }
   }
-  document.getElementById("writingPrompt").innerHTML = w;
-  resultdiv.innerHTML = count + " WPM";
+  writingPrompt.innerHTML = newhtml;
+  resultdiv.textContent = count;
 };
-
 const updateTimer = () => {
   minutesdiv.textContent = "00:";
 
@@ -150,7 +161,7 @@ const handleTimer = () => {
   getQuotes();
   if (!isBtnDisabled) {
     seconds = 59;
-    intervalID = setInterval(updateTimer, 500);
+    intervalID = setInterval(updateTimer, 100);
   }
   isBtnDisabled = true; //can't click on timer during countdown to prevent weird setInterval
 };
