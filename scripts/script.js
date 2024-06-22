@@ -120,7 +120,7 @@ const calculateWPM = () => {
     }
   }
   writingPrompt.innerHTML = newhtml;
-  resultdiv.textContent = count + " WPM";
+  resultdiv.innerHTML = count + " WPM";
 };
 
 const updateTimer = () => {
