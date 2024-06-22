@@ -27,8 +27,6 @@ inputEmail.required = true;
 inputPassword.required = true;
 inputSubmit.value = "LOGIN";
 
-//handles
-console.log(form.lastElementChild);
 //listeners
 inputSubmit.addEventListener("click", function () {
   setTimeout(() => {
@@ -47,6 +45,7 @@ form.appendChild(h1);
 form.appendChild(inputEmail);
 form.appendChild(inputPassword);
 form.appendChild(inputSubmit);
+
 //css
 const fontClass = document.querySelectorAll(".font");
 const inputClass = document.querySelectorAll(".input");
@@ -76,6 +75,7 @@ for (const i in all) {
     width: "100%",
   });
 }
+
 Object.assign(formdiv.style, {
   display: "flex",
   flexDirection: "column",
@@ -88,6 +88,7 @@ Object.assign(formdiv.style, {
   boxShadow: "10px 5px 5px gray",
   borderRadius: "10px",
 });
+
 Object.assign(h1.style, {
   textAlign: "center",
   paddingTop: ".8em",
@@ -98,6 +99,7 @@ Object.assign(home.style, {
   textDecoration: "none",
   color: "black",
 });
+
 for (const i of inputClass) {
   Object.assign(i.style, {
     display: "flex",
@@ -114,6 +116,7 @@ for (const i of inputClass) {
     border: "none",
   });
 }
+
 Object.assign(inputSubmit.style, {
   display: "flex",
   alignItems: "center",

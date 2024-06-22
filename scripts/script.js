@@ -18,6 +18,11 @@ const testcontainer = document.createElement("div");
 const testrow = document.createElement("div");
 const footer = document.createElement("footer");
 const wrong = "#BD8E83";
+const navdiv = document.createElement("div");
+const aHome = document.createElement("a");
+const accountbtndiv = document.createElement("div");
+const aLogin = document.createElement("a");
+const aSignup = document.createElement("a");
 
 //initializations
 // https://gist.github.com/nasrulhazim/54b659e43b1035215cd0ba1d4577ee80
@@ -40,73 +45,63 @@ let minutes = 0;
 let seconds = 60;
 let intervalID;
 let isBtnDisabled = false;
-const navdiv = document.createElement("div");
-const aHome = document.createElement("a");
-const accountbtndiv = document.createElement("div");
-const aLogin = document.createElement("a");
-const aSignup = document.createElement("a");
+
+//attributes and classes
 accountbtndiv.setAttribute("id", "accountbtn");
 nav.classList.add("navbar");
 nav.classList.add("bg-transparent");
-aHome.textContent = "Home";
-aHome.classList.add("navbar-brand");
-aHome.classList.add("text-black");
-aLogin.textContent = "Login";
-aLogin.classList.add("btn");
-aLogin.classList.add("text-black");
-aSignup.textContent = "Sign Up";
-aSignup.classList.add("btn");
-aSignup.classList.add("navbar");
+
 navdiv.classList.add("container-fluid");
 navdiv.style.justifyContent = "space-between";
 
 aHome.setAttribute("href", "../pages/index.html");
+aHome.textContent = "Home";
+aHome.classList.add("navbar-brand");
+aHome.classList.add("text-black");
+
 aLogin.setAttribute("href", "../pages/login.html");
-aSignup.setAttribute("href", "#");
-
 aLogin.setAttribute("type", "button");
-aSignup.setAttribute("type", "button");
-
 aLogin.style.border = "1px solid #749EB2";
+aLogin.textContent = "Login";
+aLogin.classList.add("btn");
+aLogin.classList.add("text-black");
+
+aSignup.textContent = "Sign Up";
+aSignup.classList.add("btn");
+aSignup.classList.add("navbar");
+aSignup.setAttribute("href", "#");
+aSignup.setAttribute("type", "button");
 aSignup.style.backgroundColor = " #749EB2";
 
-//attributes
+textarea.setAttribute("placeholder", "Click START and type here!");
 textarea.disabled = true; //can't start typing before timer
+textarea.classList.add("test");
+textarea.classList.add("col");
+
 writingPrompt.setAttribute("type", "text");
 writingPrompt.setAttribute("id", "writingPrompt");
 writingPrompt.textContent =
   "The prompt in which you will copy via typing will appear here. Try to type as fast and accurate as you can!";
-textarea.setAttribute("placeholder", "Click START and type here!");
+writingPrompt.classList.add("test");
+writingPrompt.classList.add("col");
+
 h1.textContent = "1-minute Typing Test";
+
 btn.textContent = "START";
+
 minutesdiv.textContent = "01:";
 secondsdiv.textContent = "00";
+
 resultdiv.textContent = "Result";
+
 footer.innerHTML = `<a id='footeranchor' href='https://github.com/rainingchicken/SBA316-DOM-Typing-Test'> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
   <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
 </svg> rainingchicken</a>`;
 
-//class
-writingPrompt.classList.add("test");
-textarea.classList.add("test");
-writingPrompt.classList.add("col");
-textarea.classList.add("col");
 testrow.classList.add("row");
 testcontainer.classList.add("container");
-app.classList.add("font");
 
-// let newhtml = "";
-// let string = "this is a test";
-// let inputttt = "this is rfbjn test";
-// let sarr = string.trim().split(/\s+/);
-// let iarr = inputttt.trim().split(/\s+/);
-// for (let i = 0; i < iarr.length; i++) {
-//   if (iarr[i] != sarr[i]) {
-//     newhtml += `<span style="color: red;">${sarr[i]}</span>`;
-//   } else {
-//     newhtml += `<span style="color: blue;">${sarr[i]}</span>`;
-//   }
-// }
+app.classList.add("font");
 
 const calculateWPM = () => {
   let count = 0;
@@ -127,9 +122,9 @@ const calculateWPM = () => {
   writingPrompt.innerHTML = newhtml;
   resultdiv.textContent = count;
 };
+
 const updateTimer = () => {
   minutesdiv.textContent = "00:";
-
   if (seconds === 0) {
     //when times up
     let audio = new Audio(
@@ -161,7 +156,7 @@ const handleTimer = () => {
   getQuotes();
   if (!isBtnDisabled) {
     seconds = 59;
-    intervalID = setInterval(updateTimer, 100);
+    intervalID = setInterval(updateTimer, 1000);
   }
   isBtnDisabled = true; //can't click on timer during countdown to prevent weird setInterval
 };
@@ -233,14 +228,17 @@ Object.assign(accountbtndiv.style, {
   display: "flex",
   alignItems: "center",
 });
+
 Object.assign(aLogin.style, {
   margin: "0 .4em",
   padding: ".5em",
 });
+
 Object.assign(aSignup.style, {
   margin: "0 .4em",
   padding: ".5em",
 });
+
 Object.assign(h1.style, {
   textAlign: "center",
   margin: "1em auto",
@@ -256,6 +254,7 @@ Object.assign(timerdiv.style, {
   margin: "0 auto",
   width: "100%",
 });
+
 Object.assign(buttonsdiv.style, {
   textAlign: "center",
 
@@ -266,6 +265,7 @@ Object.assign(buttonsdiv.style, {
   margin: "0 auto",
   display: "flex",
 });
+
 Object.assign(btn.style, {
   padding: "1em",
   borderRadius: "20px",
@@ -273,11 +273,13 @@ Object.assign(btn.style, {
   border: "none",
   backgroundColor: btnColor,
 });
+
 Object.assign(resultdiv.style, {
   textAlign: "center",
   margin: "0 auto",
   fontSize: "2em",
 });
+
 for (const i of testClass) {
   Object.assign(i.style, {
     backgroundColor: boxColor,
@@ -290,6 +292,7 @@ for (const i of testClass) {
     boxShadow: "10px 5px 5px" + shadow,
   });
 }
+
 Object.assign(footer.style, {
   textAlign: "center",
   margin: "0 auto",
@@ -302,15 +305,18 @@ Object.assign(footer.style, {
   bottom: "0",
   padding: "1em",
 });
+
 Object.assign(footeranchor.style, {
   textDecoration: "none",
   color: btnColor,
 });
+
 for (const i of whiteClass) {
   Object.assign(i.style, {
     color: "white",
   });
 }
+
 for (const i of redClass) {
   Object.assign(i.style, {
     color: wrong,
