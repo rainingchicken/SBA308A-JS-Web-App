@@ -40,17 +40,37 @@ let minutes = 0;
 let seconds = 60;
 let intervalID;
 let isBtnDisabled = false;
+const navdiv = document.createElement("div");
+const aHome = document.createElement("a");
+const accountbtndiv = document.createElement("div");
+const aLogin = document.createElement("a");
+const aSignup = document.createElement("a");
+accountbtndiv.setAttribute("id", "accountbtn");
+nav.classList.add("navbar");
+nav.classList.add("bg-transparent");
+aHome.textContent = "Home";
+aHome.classList.add("navbar-brand");
+aHome.classList.add("text-black");
+aLogin.textContent = "Login";
+aLogin.classList.add("btn");
+aLogin.classList.add("text-black");
+aSignup.textContent = "Sign Up";
+aSignup.classList.add("btn");
+aSignup.classList.add("navbar");
+navdiv.classList.add("container-fluid");
+navdiv.style.justifyContent = "space-between";
+
+aHome.setAttribute("href", "../pages/index.html");
+aLogin.setAttribute("href", "../pages/login.html");
+aSignup.setAttribute("href", "#");
+
+aLogin.setAttribute("type", "button");
+aSignup.setAttribute("type", "button");
+
+aLogin.style.border = "1px solid #749EB2";
+aSignup.style.backgroundColor = " #749EB2";
 
 //attributes
-nav.innerHTML = `<nav class="navbar bg-transparent ">
-  <div class="container-fluid style='justify-content: space-between'">
-    <a class="navbar-brand text-black" href="../pages/index.html">Home</a>
-    <div id="accountbtn">
-    <a href = '../pages/login.html' type="button" class="btn  text-black" style='border: 1px solid #749EB2'>Login</a>
-    <a href='#' type="button" class="btn text-black"style='background-color: #749EB2' >Sign Up</a>
-    </div>
-  </div>
-</nav>`;
 textarea.disabled = true; //can't start typing before timer
 writingPrompt.setAttribute("type", "text");
 writingPrompt.setAttribute("id", "writingPrompt");
@@ -114,7 +134,7 @@ const updateTimer = () => {
   if (seconds < 10) {
     seconds = "0" + seconds;
   }
-  if (seconds < 5) {
+  if (seconds <= 5) {
     timerdiv.style.color = "#BD8E83";
   } else {
     timerdiv.style.color = "black";
@@ -137,13 +157,16 @@ const handleTimer = () => {
 
 //listeners
 btn.addEventListener("click", handleTimer);
-nav.addEventListener("click", function (event) {
-  // event.preventDefault();
-  if (event.target == this.lastchild) {
-    alert("Sign ups are unavaiable at this time.");
-  }
+aSignup.addEventListener("click", function () {
+  window.alert("Sign ups are unavailable at this time.");
 });
-//appends to app
+
+//appends to
+nav.appendChild(navdiv);
+navdiv.appendChild(aHome);
+navdiv.appendChild(accountbtndiv);
+accountbtndiv.appendChild(aLogin);
+accountbtndiv.appendChild(aSignup);
 header.appendChild(nav);
 timerdiv.appendChild(minutesdiv);
 timerdiv.appendChild(secondsdiv);
@@ -164,6 +187,7 @@ const testClass = document.querySelectorAll(".test");
 const fontClass = document.querySelectorAll(".font");
 const whiteClass = document.querySelectorAll(".white");
 const redClass = document.querySelectorAll(".red");
+const links = nav.querySelectorAll("a");
 //https://www.canva.com/colors/color-palettes/classic-travel/
 const bgColor = "#E9DAC4";
 const boxColor = "white";
@@ -194,6 +218,18 @@ for (const i in all) {
   });
 }
 
+Object.assign(accountbtndiv.style, {
+  display: "flex",
+  alignItems: "center",
+});
+Object.assign(aLogin.style, {
+  margin: "0 .4em",
+  padding: ".5em",
+});
+Object.assign(aSignup.style, {
+  margin: "0 .4em",
+  padding: ".5em",
+});
 Object.assign(h1.style, {
   textAlign: "center",
   margin: "1em auto",

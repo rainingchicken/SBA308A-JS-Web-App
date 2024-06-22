@@ -20,7 +20,7 @@ inputSubmit.classList.add("btn-light");
 h1.innerHTML = `<a class='font' href='../pages/index.html'>1MTT</a>`;
 inputEmail.setAttribute("type", "email");
 inputPassword.setAttribute("type", "password");
-inputSubmit.setAttribute("type", "submit");
+inputSubmit.setAttribute("type", "button");
 inputEmail.setAttribute("placeholder", "example@email.com");
 inputPassword.setAttribute("placeholder", "password");
 inputEmail.required = true;
@@ -28,13 +28,18 @@ inputPassword.required = true;
 inputSubmit.value = "LOGIN";
 
 //handles
-function logSubmit(event) {
-  window.location.href("../pages/index.html");
-  window.alert("This account does not exist");
-  event.preventDefault();
-}
+console.log(form.lastElementChild);
 //listeners
-inputSubmit.addEventListener("submit", logSubmit);
+inputSubmit.addEventListener("click", function () {
+  setTimeout(() => {
+    window.location.href =
+      "https://rainingchicken.github.io/SBA316-DOM-Typing-Test/pages/index.html";
+  }, 0);
+
+  window.alert(
+    "This account does not exist. You will be directed to Home page"
+  );
+});
 
 //appends
 formdiv.appendChild(form);
