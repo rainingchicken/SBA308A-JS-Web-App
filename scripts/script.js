@@ -116,7 +116,7 @@ const calculateWPM = () => {
       newhtml += `<span style="color: ${wrong};">${testArr[i]}</span>` + " ";
     } else {
       count++;
-      newhtml += `<span style="color: white;">${testArr[i]}</span>` + " ";
+      newhtml += `<span style="color: black;">${testArr[i]}</span>` + " ";
     }
   }
   writingPrompt.innerHTML = newhtml;
