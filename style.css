@@ -1,3 +1,9 @@
+:root {
+    --containerWidth: 400px;
+    --containerHeight: 400px;
+    --childContainerHeight: 200px;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -8,8 +14,24 @@
 }
 
 .container {
-    background-color: aqua;
-    width: 400px;
-    height: 400px;
+    display: flex;
+    flex-direction: column;
+    background-color: red;
+    width: var(--containerWidth);
+    height: var(--containerHeight);
+    border: 1px solid black
+}
+
+.dayContainer {
+    background-color: aliceblue;
+    max-width: var(--containerWidth);
+    height: var(--childContainerHeight);
+    border: 1px solid black
+}
+
+.nightContainer {
+    background-color: blueviolet;
+    max-width: var(--containerWidth);
+    height: var(--childContainerHeight);
     border: 1px solid black
 }
