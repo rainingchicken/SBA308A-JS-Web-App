@@ -1,6 +1,9 @@
 //https://www.weather.gov/documentation/services-web-api#/default/alerts_query
 //https://openweathermap.org/api
+//imports
+import { Forecast } from "./Forecast.js";
 
+//initializations
 const API_KEY = "2d3f8e77a48455b0dce571edae173fdf";
 const city = "Los Angeles";
 const state = "CA";
@@ -50,40 +53,6 @@ const createForcast = (periodLength) => {
     app.appendChild(weatherContainer);
   }
 };
-
-class Forecast {
-  //field
-
-  //constructor
-  constructor(dayTime, temperature, shortForecast, rain, wind) {
-    this.dayTime = dayTime;
-    this.temperature = temperature;
-    this.shortForecast = shortForecast;
-    this.rain = rain;
-    this.wind = wind;
-  }
-
-  //methods
-  createOverview(parentEl) {
-    const dayTimeEl = document.createElement("h2");
-    const temperatureEl = document.createElement("h1");
-    const shortForecastEL = document.createElement("h3");
-    const rainEL = document.createElement("h5");
-    const windEL = document.createElement("h5");
-
-    dayTimeEl.textContent = this.dayTime;
-    temperatureEl.textContent = this.temperature;
-    shortForecastEL.textContent = this.shortForecast;
-    rainEL.textContent = this.rain;
-    windEL.textContent = this.wind;
-
-    parentEl.appendChild(dayTimeEl);
-    parentEl.appendChild(temperatureEl);
-    parentEl.appendChild(shortForecastEL);
-    parentEl.appendChild(rainEL);
-    parentEl.appendChild(windEL);
-  }
-}
 
 const insertInfo = (forecastInfo) => {
   const dayNightContainers = document.querySelectorAll(".childContainer");
