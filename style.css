@@ -1,7 +1,7 @@
 :root {
     --containerWidth: 400px;
-    --containerHeight: 400px;
-    --childContainerHeight: 200px;
+    --containerHeight: 200px;
+    --childContainerWidth: 200px;
 }
 
 * {
@@ -13,11 +13,12 @@
 #app {
     display: flex;
     margin: 0 auto;
+    flex-direction: column;
 }
 
 .container {
     display: flex;
-    flex-direction: column;
+
     background-color: red;
     width: var(--containerWidth);
     height: var(--containerHeight);
@@ -26,16 +27,16 @@
 
 .container .dayContainer {
     background-color: aliceblue;
-    max-width: var(--containerWidth);
-    height: 50%;
-    max-height: var(--childContainerHeight);
+    width: 100%;
+    max-width: var(--childContainerWidth);
+    max-height: var(--containerHeight);
     border: 1px solid black
 }
 
 .container .nightContainer {
     background-color: blueviolet;
-    max-width: var(--containerWidth);
-    height: 50%;
+    width: 100%;
+    max-width: var(--childContainerWidth);
     max-height: var(--childContainerHeight);
     border: 1px solid black
 }

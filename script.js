@@ -24,8 +24,10 @@ const initialLoad = async () => {
   const r = await fetch(`${forecast}`);
   const d = await r.json();
   const forecastInfo = d.properties.periods;
-  //console.log(forecastInfo);
+  console.log(forecastInfo);
+
   createForcast(forecastInfo.length);
+  checkTime(forecastInfo);
   insertInfo(forecastInfo);
 };
 initialLoad();
@@ -53,7 +55,8 @@ class Forecast {
   //field
 
   //constructor
-  constructor(temperature, shortForecast, rain, wind) {
+  constructor(dayTime, temperature, shortForecast, rain, wind) {
+    this.dayTime = dayTime;
     this.temperature = temperature;
     this.shortForecast = shortForecast;
     this.rain = rain;
@@ -62,16 +65,19 @@ class Forecast {
 
   //methods
   createOverview(parentEl) {
+    const dayTimeEl = document.createElement("h2");
     const temperatureEl = document.createElement("h1");
     const shortForecastEL = document.createElement("h3");
     const rainEL = document.createElement("h5");
     const windEL = document.createElement("h5");
 
+    dayTimeEl.textContent = this.dayTime;
     temperatureEl.textContent = this.temperature;
     shortForecastEL.textContent = this.shortForecast;
     rainEL.textContent = this.rain;
     windEL.textContent = this.wind;
 
+    parentEl.appendChild(dayTimeEl);
     parentEl.appendChild(temperatureEl);
     parentEl.appendChild(shortForecastEL);
     parentEl.appendChild(rainEL);
@@ -82,6 +88,9 @@ class Forecast {
 const insertInfo = (forecastInfo) => {
   const dayNightContainers = document.querySelectorAll(".childContainer");
   dayNightContainers.forEach((containerEl, index) => {
+    //get dayname
+    const forecastDayName = forecastInfo[index].name;
+
     //get temperature
     const forecastTemperature = forecastInfo[index].temperature;
     const forecastTemperatureUnit = forecastInfo[index].temperatureUnit;
@@ -103,6 +112,7 @@ const insertInfo = (forecastInfo) => {
     const forecastWind = `${forecastWindSpeed} ${forecastWindDirection} wind`;
 
     const forecastOverview = new Forecast(
+      forecastDayName,
       forecastTemp,
       forecastShortForecast,
       forecastRain,
@@ -110,4 +120,31 @@ const insertInfo = (forecastInfo) => {
     );
     forecastOverview.createOverview(containerEl);
   });
+};
+
+//if first object of forecastInfo shows the night forecast, then remove the day forecast
+const checkTime = (forecastInfo) => {
+  if (!forecastInfo[0].isDaytime) {
+    //console.log(forecastInfo[0].isDaytime);
+    const parentContainer = document.getElementsByClassName("container")[0];
+    const todayDayContainer = document.querySelector(".childContainer");
+    //const lastNightContainer = document.querySelectorAll(".childContainer")[
+    //   forecastInfo.length - 1
+    // ];
+    //console.log("parent", parentContainer);
+    //console.log("today", todayDayContainer);
+    //console.log("lastnight", lastNightContainer);
+    parentContainer.removeChild(todayDayContainer);
+    // parentContainer.removeChild(lastNightContainer);
+
+    const tonightContainer = document.querySelector(".childContainer");
+    // const lastDayContainer = document.querySelectorAll(".childContainer")[
+    //   forecastInfo.length - 2
+    // ];
+    const containerWidth = "var(--containerWidth)";
+    tonightContainer.style.maxWidth = containerWidth;
+    // lastDayContainer.firstElementChild.style.width = "400px";
+    //console.log("tongith", tonightContainer);
+    // console.log("lastday", lastDayContainer);
+  }
 };
