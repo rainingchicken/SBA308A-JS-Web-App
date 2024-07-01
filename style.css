@@ -1,7 +1,7 @@
 :root {
-    --containerWidth: 400px;
+    --containerWidth: 500px;
     --containerHeight: 200px;
-    --childContainerWidth: 200px;
+    --childContainerWidth: 250px;
 }
 
 * {
@@ -39,4 +39,23 @@
     max-width: var(--childContainerWidth);
     max-height: var(--childContainerHeight);
     border: 1px solid black
+}
+
+.subContainers {
+    display: flex;
+    background-color: red;
+    width: var(--containerWidth);
+    height: var(--containerHeight);
+    border: 1px solid black;
+    overflow: auto;
+    overflow-y: hidden;
+}
+
+.subContainers .hourlySlot {
+    background-color: blue;
+    width: 150px;
+    min-width: 150px;
+    height: var(--containerHeight);
+    border: 1px solid black;
+
 }
