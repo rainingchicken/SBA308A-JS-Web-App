@@ -30,7 +30,6 @@ const initialLoad = async (city, state) => {
   let latitude = LatLonData[0].lat;
   let cityName = LatLonData[0].name;
   let stateName = LatLonData[0].state;
-  //console.log(LatLonData);
   const location = new Location(cityName, stateName);
   location.createLocation();
 
@@ -173,5 +172,30 @@ submitButton.addEventListener("click", function () {
   }
   city = inputCity.value;
   state = inputState.value;
-  initialLoad(city, state);
+  if (city == "" || state == "") {
+    alert("Please input city and state");
+    window.location.reload();
+  }
+
+  function main() {
+    return new Promise(function (resolve, reject) {
+      initialLoad(city, state);
+      setTimeout(() => {
+        // This is the error which is handled
+        // according to network requests
+        const error = true;
+        reject();
+      }, 0);
+    });
+  }
+  main().catch(function () {
+    // Only executed if rejects the promise
+    console.log("rejected the promise, something wrong happened");
+    alert("Please check spelling or ensure that city and state exists!");
+    window.location.reload();
+  });
 });
+
+//if subcontainer has anothing then disable div toggle
+//style page
+//toggle hourly forecasts
