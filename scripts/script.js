@@ -5,17 +5,36 @@
 import { Forecast } from "./Forecast.js";
 import { DivContainers } from "./DivContainers.js";
 import { SubDivContainers } from "./subDivContainers.js";
+import { Location } from "./Location.js";
 
 //initializations
 const API_KEY = "2d3f8e77a48455b0dce571edae173fdf";
 //const anotherAPI_KEY = '0cf2a6a9651b76e68b7aa85cecda79a5'
-const city = "Los Angeles";
-const state = "CA";
+let city = "Dallas";
+let state = "TX";
 const country = "US";
 
 const app = document.getElementById("app");
+const form = document.createElement("form");
+const inputCity = document.createElement("input");
+const inputState = document.createElement("input");
+const submitButton = document.createElement("button");
 
-const initialLoad = async () => {
+inputCity.setAttribute("type", "input");
+inputCity.setAttribute("type", "input");
+submitButton.setAttribute("type", "button");
+
+form.classList.add("form");
+inputCity.classList.add("city");
+inputState.classList.add("state");
+submitButton.classList.add("submitButton");
+
+form.appendChild(inputCity);
+form.appendChild(inputState);
+form.appendChild(submitButton);
+app.appendChild(form);
+
+const initialLoad = async (city, state) => {
   //fetch latitude and longitude
   const LatLonResponse = await fetch(
     `http://api.openweathermap.org/geo/1.0/direct?q=${city},${state},${country}&limit=5&appid=${API_KEY}`
@@ -23,6 +42,11 @@ const initialLoad = async () => {
   const LatLonData = await LatLonResponse.json();
   let longitude = LatLonData[0].lon;
   let latitude = LatLonData[0].lat;
+  let cityName = LatLonData[0].name;
+  let stateName = LatLonData[0].state;
+  console.log(LatLonData);
+  const location = new Location(cityName, stateName);
+  location.createLocation();
 
   //fetch weather data
   const weatherResponse = await fetch(
@@ -31,13 +55,13 @@ const initialLoad = async () => {
   const weatherData = await weatherResponse.json();
   const forecast = weatherData.properties.forecast; //gets url to weekly forecast
   const hourlyForecast = weatherData.properties.forecastHourly; //gets url to hourly forecast
-  const forecastTimeZone = weatherData.properties.timeZone; //gets America/Los Angeles
+  //console.log(weatherData);
 
   //fetch forecast
   const forecastResponse = await fetch(`${forecast}`);
   const forecastData = await forecastResponse.json();
   const forecastInfo = forecastData.properties.periods; //bidaily forecast
-  //console.log(forecastInfo);
+  //console.log(forecastData);
 
   const forecastContainers = new DivContainers(forecastInfo.length);
   forecastContainers.createForcast();
@@ -63,7 +87,7 @@ const initialLoad = async () => {
   const hourlyContainers = document.querySelectorAll(".hourlySlot");
   insertInfo(forecastInfoHourly, hourlyContainers);
 };
-initialLoad();
+initialLoad(city, state);
 
 const insertInfo = (forecastType, containers) => {
   containers.forEach((containerEl, index) => {
@@ -74,13 +98,16 @@ const insertInfo = (forecastType, containers) => {
     } else {
       let startTime = forecastType[index].startTime;
       let time = new Date(startTime).getHours();
-      if (time > 11) {
+      if (time > 12) {
         time = `${time - 12} PM`;
       } else {
         time = `${time} AM`;
       }
       forecastDayName = time;
     }
+
+    //const forecastDayName = forecastType[index].name;
+
     //get temperature
     const forecastTemperature = forecastType[index].temperature;
     const forecastTemperatureUnit = forecastType[index].temperatureUnit;
@@ -137,11 +164,46 @@ const countDayHourlyForecast = (forecastInfoHourly, forecastInfo) => {
   } else {
     dayEndTime = forecastInfo[1].endTime;
   }
+
   for (let hour = 0; hour < forecastInfoHourly.length; hour++) {
-    if (forecastInfoHourly[hour].endTime !== dayEndTime) {
+    if (forecastInfoHourly[hour].endTime != dayEndTime) {
       count++;
     } else {
       return count;
     }
   }
 };
+const createInputs = () => {
+  const form = document.createElement("form");
+  const inputCity = document.createElement("input");
+  const inputState = document.createElement("input");
+  const submitButton = document.createElement("button");
+
+  form.classList.add("form");
+  inputCity.classList.add("city");
+  inputState.classList.add("state");
+  submitButton.classList.add("submitButton");
+
+  form.appendChild(inputCity);
+  form.appendChild(inputState);
+  form.appendChild(submitButton);
+  app.appendChild(form);
+
+  submitButton.addEventListener("click", function (event) {
+    city = inputCity.value;
+    state = inputState.value;
+  });
+};
+
+//clear all created containers and timeZone label
+submitButton.addEventListener("click", function () {
+  const all = document.querySelectorAll(".container, .subContainers");
+  const location = document.querySelector(".location");
+  location.remove();
+  for (const element of all) {
+    element.remove();
+  }
+  city = inputCity.value;
+  state = inputState.value;
+  initialLoad(city, state);
+});
