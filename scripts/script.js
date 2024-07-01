@@ -2,6 +2,7 @@
 //https://openweathermap.org/api
 
 //imports
+import { Input } from "./Input.js";
 import { Forecast } from "./Forecast.js";
 import { DivContainers } from "./DivContainers.js";
 import { SubDivContainers } from "./subDivContainers.js";
@@ -15,24 +16,9 @@ let state = "TX";
 const country = "US";
 
 const app = document.getElementById("app");
-const form = document.createElement("form");
-const inputCity = document.createElement("input");
-const inputState = document.createElement("input");
-const submitButton = document.createElement("button");
 
-inputCity.setAttribute("type", "input");
-inputCity.setAttribute("type", "input");
-submitButton.setAttribute("type", "button");
-
-form.classList.add("form");
-inputCity.classList.add("city");
-inputState.classList.add("state");
-submitButton.classList.add("submitButton");
-
-form.appendChild(inputCity);
-form.appendChild(inputState);
-form.appendChild(submitButton);
-app.appendChild(form);
+const inputs = new Input();
+inputs.createInputs();
 
 const initialLoad = async (city, state) => {
   //fetch latitude and longitude
@@ -44,7 +30,7 @@ const initialLoad = async (city, state) => {
   let latitude = LatLonData[0].lat;
   let cityName = LatLonData[0].name;
   let stateName = LatLonData[0].state;
-  console.log(LatLonData);
+  //console.log(LatLonData);
   const location = new Location(cityName, stateName);
   location.createLocation();
 
@@ -173,29 +159,11 @@ const countDayHourlyForecast = (forecastInfoHourly, forecastInfo) => {
     }
   }
 };
-const createInputs = () => {
-  const form = document.createElement("form");
-  const inputCity = document.createElement("input");
-  const inputState = document.createElement("input");
-  const submitButton = document.createElement("button");
-
-  form.classList.add("form");
-  inputCity.classList.add("city");
-  inputState.classList.add("state");
-  submitButton.classList.add("submitButton");
-
-  form.appendChild(inputCity);
-  form.appendChild(inputState);
-  form.appendChild(submitButton);
-  app.appendChild(form);
-
-  submitButton.addEventListener("click", function (event) {
-    city = inputCity.value;
-    state = inputState.value;
-  });
-};
 
 //clear all created containers and timeZone label
+const submitButton = document.querySelector(".submitButton");
+const inputCity = document.querySelector(".city");
+const inputState = document.querySelector(".state");
 submitButton.addEventListener("click", function () {
   const all = document.querySelectorAll(".container, .subContainers");
   const location = document.querySelector(".location");
