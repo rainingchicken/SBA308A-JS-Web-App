@@ -39,7 +39,7 @@ inputs.createInputs();
 const initialLoad = async (city, state) => {
   //fetch latitude and longitude
   const LatLonResponse = await fetch(
-    `http://api.openweathermap.org/geo/1.0/direct?q=${city},${state},${country}&limit=5&appid=${API_KEY}`
+    `https://api.openweathermap.org/geo/1.0/direct?q=${city},${state},${country}&limit=5&appid=${API_KEY}`
   );
   const LatLonData = await LatLonResponse.json();
   //console.log(LatLonData);
