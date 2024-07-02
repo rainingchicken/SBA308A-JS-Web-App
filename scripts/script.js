@@ -26,6 +26,14 @@ const initialLoad = async (city, state) => {
     `http://api.openweathermap.org/geo/1.0/direct?q=${city},${state},${country}&limit=5&appid=${API_KEY}`
   );
   const LatLonData = await LatLonResponse.json();
+  //console.log(LatLonData);
+  if (LatLonData.length == 0) {
+    setTimeout(() => {
+      alert("Invalid city and/or state");
+      window.location.reload();
+      throw new Error("Invalid city and/or state");
+    }, 0);
+  }
   let longitude = LatLonData[0].lon;
   let latitude = LatLonData[0].lat;
   let cityName = LatLonData[0].name;
@@ -176,26 +184,10 @@ submitButton.addEventListener("click", function () {
     alert("Please input city and state");
     window.location.reload();
   }
-
-  function main() {
-    return new Promise(function (resolve, reject) {
-      initialLoad(city, state);
-      setTimeout(() => {
-        // This is the error which is handled
-        // according to network requests
-        const error = true;
-        reject();
-      }, 0);
-    });
-  }
-  main().catch(function () {
-    // Only executed if rejects the promise
-    console.log("rejected the promise, something wrong happened");
-    alert("Please check spelling or ensure that city and state exists!");
-    window.location.reload();
-  });
+  initialLoad(city, state);
 });
 
 //if subcontainer has anothing then disable div toggle
 //style page
 //toggle hourly forecasts
+//fetch error not doneeeeeeeeeeeee
