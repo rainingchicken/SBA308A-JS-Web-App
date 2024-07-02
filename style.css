@@ -16,6 +16,15 @@
     flex-direction: column;
 }
 
+.containerContainer {
+    display: flex;
+
+    background-color: red;
+    width: var(--containerWidth);
+    height: var(--containerHeight);
+    border: 1px solid black
+}
+
 .container {
     display: flex;
 
@@ -23,6 +32,10 @@
     width: var(--containerWidth);
     height: var(--containerHeight);
     border: 1px solid black
+}
+
+.container:hover {
+    cursor: pointer;
 }
 
 .container .dayContainer {
@@ -42,7 +55,7 @@
 }
 
 .subContainers {
-    display: flex;
+    /* display: none; */
     background-color: red;
     width: var(--containerWidth);
     height: var(--containerHeight);

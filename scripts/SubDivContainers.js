@@ -22,7 +22,7 @@ export class SubDivContainers {
       }
 
       subDivContainers.classList.add("subContainers");
-
+      subDivContainers.style.display = "none";
       container.insertAdjacentElement("afterend", subDivContainers); //append subDivContainers after each divContainers
     });
   };

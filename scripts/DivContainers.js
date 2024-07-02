@@ -13,7 +13,7 @@ export class DivContainers {
       const dayContainer = document.createElement("div");
       const nightContainer = document.createElement("div");
 
-      weatherContainer.classList.add("container");
+      weatherContainer.classList.add("container", "clickable");
       dayContainer.classList.add("dayContainer", "childContainer");
       nightContainer.classList.add("nightContainer", "childContainer");
 

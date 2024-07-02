@@ -79,6 +79,8 @@ const initialLoad = async (city, state) => {
   hourlyForecastContainers.createHourlyForecast();
   const hourlyContainers = document.querySelectorAll(".hourlySlot");
   insertInfo(forecastInfoHourly, hourlyContainers);
+
+  divToggle();
 };
 initialLoad(city, state);
 
@@ -190,4 +192,16 @@ submitButton.addEventListener("click", function () {
 //if subcontainer has anothing then disable div toggle
 //style page
 //toggle hourly forecasts
-//fetch error not doneeeeeeeeeeeee
+const divToggle = () => {
+  const containers = document.getElementsByClassName("clickable");
+  for (const each of containers) {
+    each.addEventListener("click", function (event) {
+      event.preventDefault();
+      if (this.nextElementSibling.style.display === "none") {
+        this.nextElementSibling.style.display = "flex";
+      } else {
+        this.nextElementSibling.style.display = "none";
+      }
+    });
+  }
+};
