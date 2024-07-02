@@ -18,6 +18,7 @@ export class Input {
     inputState.required = true;
     inputState.setAttribute("placeholder", "State");
     submitButton.setAttribute("type", "button");
+    submitButton.textContent = "SUBMIT";
 
     form.classList.add("form");
     inputCity.classList.add("city");

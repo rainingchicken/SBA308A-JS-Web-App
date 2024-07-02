@@ -1,79 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
 :root {
     --containerWidth: 500px;
-    --containerHeight: 200px;
+    --containerHeight: 225px;
     --childContainerWidth: 250px;
+    --bodybg: #F6F0E4;
+    --day: #C2DDE8;
+    --night: #305278;
+    --hourly: #60A2AE;
+    --sun: #E0B887;
 }
+
+
+
 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
 }
 
 #app {
+    background-color: var(--bodybg);
     display: flex;
     margin: 0 auto;
+    padding: 2em;
     flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
 }
 
-.containerContainer {
-    display: flex;
-
-    background-color: red;
-    width: var(--containerWidth);
-    height: var(--containerHeight);
-    border: 1px solid black
+.subTitle {
+    margin: 1em 0;
 }
 
 .container {
     display: flex;
-
-    background-color: red;
+    text-align: center;
+    background-color: var(--bodybg);
     width: var(--containerWidth);
     height: var(--containerHeight);
-    border: 1px solid black
 }
 
 .container:hover {
     cursor: pointer;
+    border: 1px solid white;
+    transition-duration: .5s;
+    transform: scale(1.05);
 }
 
 .container .dayContainer {
-    background-color: aliceblue;
+    background-color: var(--day);
     width: 100%;
     max-width: var(--childContainerWidth);
     max-height: var(--containerHeight);
-    border: 1px solid black
+    padding: 1em;
 }
 
 .container .nightContainer {
-    background-color: blueviolet;
+    background-color: var(--night);
     width: 100%;
     max-width: var(--childContainerWidth);
     max-height: var(--childContainerHeight);
-    border: 1px solid black
+    padding: 1em;
 }
 
 .subContainers {
     /* display: none; */
-    background-color: red;
+    text-align: center;
+    background-color: var(--hourly);
     width: var(--containerWidth);
     height: var(--containerHeight);
-    border: 1px solid black;
     overflow: auto;
     overflow-y: hidden;
+    margin-bottom: 1em;
+    padding: 1em;
 }
 
 .subContainers .hourlySlot {
-    background-color: blue;
+    background-color: var(--hourly);
     width: 150px;
     min-width: 150px;
     height: var(--containerHeight);
-    border: 1px solid black;
+    padding: 1em;
 
 }
 
-.submitButton {
-    width: 4em;
+form {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.location {
+    color: var(--sun);
+    margin: 1em;
+}
+
+input {
+    border-radius: 2px;
+    line-height: 1.3em;
+    border: none;
     height: 2em;
+    padding: .5em;
+    font-size: 1.5em;
+}
+
+.submitButton {
+    height: 2em;
+    padding: .5em;
+    border: none;
+    height: 2em;
+    border-radius: 2px;
+    background-color: var(--sun);
+    font-size: 1.5em;
+    color: black;
+}
+
+.submitButton:hover {
+    background-color: var(--night);
+    cursor: pointer;
+}
+
+#footeranchor {
+    padding-top: 2em;
+    text-decoration: none;
+    color: var(--sun);
 }
