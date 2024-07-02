@@ -9,7 +9,8 @@ import { SubDivContainers } from "./SubDivContainers.js";
 import { Location } from "./Location.js";
 
 //initializations
-const API_KEY = "2d3f8e77a48455b0dce571edae173fdf";
+const API_KEY = "668485130ace1696841598qug4b1ed1";
+//"2d3f8e77a48455b0dce571edae173fdf";
 //const anotherAPI_KEY = '0cf2a6a9651b76e68b7aa85cecda79a5'
 let city = "Dallas"; //default city
 let state = "TX"; //default state
@@ -38,11 +39,14 @@ inputs.createInputs();
 
 const initialLoad = async (city, state) => {
   //fetch latitude and longitude
+  //const LatLonResponse = await fetch(
+  //   `http://api.openweathermap.org/geo/1.0/direct?q=${city},${state},${country}&limit=5&appid=${API_KEY}`
+  // );
   const LatLonResponse = await fetch(
-    `https://api.openweathermap.org/geo/1.0/direct?q=${city},${state},${country}&limit=5&appid=${API_KEY}`
+    `https://geocode.maps.co/search?q=${city},${state},${country}&api_key=668485130ace1696841598qug4b1ed1`
   );
   const LatLonData = await LatLonResponse.json();
-  //console.log(LatLonData);
+  //console.log(LatLonData[0]);
 
   function fetchError() {
     return new Promise(function (resolve, reject) {
@@ -61,9 +65,9 @@ const initialLoad = async (city, state) => {
 
   let longitude = LatLonData[0].lon;
   let latitude = LatLonData[0].lat;
-  let cityName = LatLonData[0].name;
-  let stateName = LatLonData[0].state;
-  const location = new Location(cityName, stateName);
+  let locationName = LatLonData[0].display_name;
+  //let stateName = LatLonData[0].state;
+  const location = new Location(locationName);
   location.createLocation();
 
   //fetch weather data
@@ -84,7 +88,9 @@ const initialLoad = async (city, state) => {
   const forecastContainers = new DivContainers(forecastInfo.length);
   forecastContainers.createForcast();
   checkTime(forecastInfo);
-  const dayNightContainers = document.querySelectorAll(".childContainer");
+  const dayNightContainers = Array.from(
+    document.getElementsByClassName("childContainer")
+  );
   insertInfo(forecastInfo, dayNightContainers);
 
   //fetch hourly forecast
@@ -95,30 +101,41 @@ const initialLoad = async (city, state) => {
     forecastInfoHourly,
     forecastInfo
   );
+
   let hourlyForecastSlots = [firstHourlyForecastSlots, 24, 24, 24, 24, 24, 24];
-  const divContainers = document.querySelectorAll(".container");
+  const divContainers = Array.from(
+    document.getElementsByClassName("container")
+  );
   const hourlyForecastContainers = new SubDivContainers(
     divContainers,
     hourlyForecastSlots
   );
+
   hourlyForecastContainers.createHourlyForecast();
-  const hourlyContainers = document.querySelectorAll(".hourlySlot");
+  const hourlyContainers = Array.from(
+    document.getElementsByClassName("hourlySlot")
+  );
+  //console.log(forecastInfoHourly);
   insertInfo(forecastInfoHourly, hourlyContainers);
 
   divToggle();
-  app.appendChild(footer);
+  //app.appendChild(footer);
 };
 initialLoad(city, state);
 
 const insertInfo = (forecastType, containers) => {
   containers.forEach((containerEl, index) => {
     //get dayname
-    let forecastDayName;
+
+    let forecastDayName = "";
+    let startTime = "";
+    let time = "";
     if (forecastType.length <= 14) {
       forecastDayName = forecastType[index].name;
     } else {
-      let startTime = forecastType[index].startTime;
-      let time = new Date(startTime).getHours();
+      startTime = forecastType[index].startTime;
+      //2024-07-09T04:00:00-05:00
+      time = Number(startTime.split("T")[1].slice(0, 2));
       if (time > 12) {
         time = `${time - 12} PM`;
       } else {

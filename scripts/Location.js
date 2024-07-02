@@ -1,14 +1,13 @@
 export class Location {
-  constructor(city, state) {
-    this.city = city;
-    this.state = state;
+  constructor(location) {
+    this.location = location;
   }
 
   //methods
   createLocation() {
     const header = document.createElement("h1");
     header.classList.add("location");
-    header.textContent = `${this.city}, ${this.state}`;
+    header.textContent = `${this.location}`;
     app.appendChild(header);
   }
 }

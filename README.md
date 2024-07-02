@@ -18,7 +18,7 @@ This is another Skill Based Assessment project for Per Scholas. This project is 
 
 - Use the fetch API or Axios to communicate with an external web API. Use the data provided by this API to populate your application’s content and features.
   - fetched 2 different APIs and multiple urls
-    - fetched api.openweathermap.org for lat and lon
+    - fetched https://geocode.maps.co for lat and lon
     - fetched api.weather.gov for location names, bidaily forecasts, hourly forecasts, etc
 - Create user interaction with the API through a search feature, paginated gallery, or similar. This feature should use GET requests to retrieve associated data.
   - user inputs city and state and app will get forecasts for that area
@@ -56,4 +56,4 @@ const LatLonResponse = await fetch(
 - https://fonts.google.com/specimen/Quicksand
 - https://www.schemecolor.com/another-curiosity.php
 - https://www.weather.gov/documentation/services-web-api#/default/alerts_query
-- https://openweathermap.org/api
+- https://geocode.maps.co
