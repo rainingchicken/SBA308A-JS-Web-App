@@ -5,7 +5,7 @@
 import { Input } from "./Input.js";
 import { Forecast } from "./Forecast.js";
 import { DivContainers } from "./DivContainers.js";
-import { SubDivContainers } from "./subDivContainers.js";
+import { SubDivContainers } from "./SubDivContainers.js";
 import { Location } from "./Location.js";
 
 //initializations
