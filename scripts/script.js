@@ -28,6 +28,7 @@ subTitle.classList.add("subTitle");
 subTitle.textContent = "Check the weather at any US city!";
 
 app.appendChild(title);
+app.appendChild(footer);
 app.appendChild(subTitle);
 
 footer.innerHTML = `<a id='footeranchor' href='https://github.com/rainingchicken/SBA308A-JS-Web-App'> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
@@ -48,14 +49,14 @@ const initialLoad = async (city, state) => {
   const LatLonData = await LatLonResponse.json();
   //console.log(LatLonData[0]);
 
-  function fetchError() {
+  function LatLonFetchError() {
     return new Promise(function (resolve, reject) {
       if (LatLonData.length == 0) {
         reject();
       }
     });
   }
-  fetchError().catch(function () {
+  LatLonFetchError().catch(function () {
     setTimeout(() => {
       alert("Invalid city and/or state");
       window.location.reload();
@@ -74,6 +75,20 @@ const initialLoad = async (city, state) => {
   const weatherResponse = await fetch(
     `https://api.weather.gov/points/${latitude},${longitude}`
   );
+  function weatherFetchError() {
+    return new Promise(function (resolve, reject) {
+      if (!weatherResponse.ok) {
+        reject();
+      }
+    });
+  }
+  weatherFetchError().catch(function () {
+    setTimeout(() => {
+      const submitButton = document.getElementsByClassName("submitButton")[0];
+      submitButton.click();
+      throw new Error("Need to submit again!");
+    }, 0);
+  });
   const weatherData = await weatherResponse.json();
   const forecast = weatherData.properties.forecast; //gets url to weekly forecast
   const hourlyForecast = weatherData.properties.forecastHourly; //gets url to hourly forecast
@@ -84,7 +99,20 @@ const initialLoad = async (city, state) => {
   const forecastData = await forecastResponse.json();
   const forecastInfo = forecastData.properties.periods; //bidaily forecast
   //console.log(forecastData);
-
+  function fetchError() {
+    return new Promise(function (resolve, reject) {
+      if (forecastData.length == 0) {
+        reject();
+      }
+    });
+  }
+  fetchError().catch(function () {
+    setTimeout(() => {
+      alert("No weather office here. Sorry!");
+      window.location.reload();
+      throw new Error("No weather office here. Sorry!");
+    }, 0);
+  });
   const forecastContainers = new DivContainers(forecastInfo.length);
   forecastContainers.createForcast();
   checkTime(forecastInfo);
@@ -103,6 +131,14 @@ const initialLoad = async (city, state) => {
   );
 
   let hourlyForecastSlots = [firstHourlyForecastSlots, 24, 24, 24, 24, 24, 24];
+  let slicedforecastInfoHourly = forecastInfoHourly.slice(
+    0,
+    hourlyForecastSlots.reduce((a, b) => a + b, 0)
+  );
+  //console.log(
+  //   firstHourlyForecastSlots,
+  //   hourlyForecastSlots.reduce((a, b) => a + b, 0)
+  // );
   const divContainers = Array.from(
     document.getElementsByClassName("container")
   );
@@ -116,43 +152,67 @@ const initialLoad = async (city, state) => {
     document.getElementsByClassName("hourlySlot")
   );
   //console.log(forecastInfoHourly);
-  insertInfo(forecastInfoHourly, hourlyContainers);
-
+  insertInfo(slicedforecastInfoHourly, hourlyContainers);
+  //console.log(forecastInfoHourly);
   divToggle();
-  //app.appendChild(footer);
 };
 initialLoad(city, state);
 
 const insertInfo = (forecastType, containers) => {
+  //console.log(forecastType);
   containers.forEach((containerEl, index) => {
     //get dayname
 
     let forecastDayName = "";
-    let startTime = "";
+    let theStartTime = "";
     let time = "";
     if (forecastType.length <= 14) {
       forecastDayName = forecastType[index].name;
     } else {
-      startTime = forecastType[index].startTime;
-      //2024-07-09T04:00:00-05:00
-      time = Number(startTime.split("T")[1].slice(0, 2));
-      if (time > 12) {
-        time = `${time - 12} PM`;
+      if (!Object.keys(forecastType[index].endTime || {})) {
+        theStartTime = forecastType[index].endTime;
+        //console.log(forecastType[index]);
+        //2024-07-09T04:00:00-05:00
+        time = Number(theStartTime.split("T")[1].slice(0, 2));
+        if (time == 13) {
+          time = `${time} PM`;
+        } else if (time == 1) {
+          time = `12 AM`;
+        } else if (time > 13) {
+          time = `${time - 1 - 12} PM`;
+        } else {
+          time = `${time - 1} AM`;
+        }
       } else {
-        time = `${time} AM`;
+        //it's running the else...
+        theStartTime = forecastType[index].startTime;
+        //console.log(forecastType[index]);
+        //2024-07-09T04:00:00-05:00
+        time = Number(theStartTime.split("T")[1].slice(0, 2));
+
+        if (time == 12) {
+          time = `${time} PM`;
+        } else if (time == 0) {
+          time = `12 AM`;
+        } else if (time > 12) {
+          time = `${time - 12} PM`;
+        } else {
+          time = `${time} AM`;
+        }
       }
       forecastDayName = time;
+      //console.log(forecastDayName);
     }
 
     //const forecastDayName = forecastType[index].name;
 
     //get temperature
-    const forecastTemperature = forecastType[index].temperature;
-    const forecastTemperatureUnit = forecastType[index].temperatureUnit;
-    const forecastTemp = `${forecastTemperature}°${forecastTemperatureUnit}`;
+    let forecastTemperature = forecastType[index].temperature;
+    let forecastTemperatureUnit = forecastType[index].temperatureUnit;
+    let forecastTemp = `${forecastTemperature}°${forecastTemperatureUnit}`;
 
     //get shortforecast
-    const forecastShortForecast = forecastType[index].shortForecast;
+    let forecastShortForecast = forecastType[index].shortForecast;
 
     //get rain possibility
     let forecastRain = forecastType[index].probabilityOfPrecipitation.value;
@@ -163,11 +223,11 @@ const insertInfo = (forecastType, containers) => {
     }
 
     //get wind
-    const forecastWindSpeed = forecastType[index].windSpeed;
-    const forecastWindDirection = forecastType[index].windDirection;
-    const forecastWind = `${forecastWindSpeed} ${forecastWindDirection} wind`;
+    let forecastWindSpeed = forecastType[index].windSpeed;
+    let forecastWindDirection = forecastType[index].windDirection;
+    let forecastWind = `${forecastWindSpeed} ${forecastWindDirection} wind`;
 
-    const forecastOverview = new Forecast(
+    let forecastOverview = new Forecast(
       forecastDayName,
       forecastTemp,
       forecastShortForecast,
@@ -180,16 +240,27 @@ const insertInfo = (forecastType, containers) => {
 
 //if first object of forecastInfo shows the night forecast, then remove the day forecast
 const checkTime = (forecastInfo) => {
+  const parentContainer = document.getElementsByClassName("container")[0];
+  const todayDayContainer = document.getElementsByClassName(
+    "childContainer"
+  )[0];
   if (!forecastInfo[0].isDaytime) {
     //console.log(forecastInfo[0].isDaytime);
-    const parentContainer = document.getElementsByClassName("container")[0];
-    const todayDayContainer = document.querySelector(".childContainer");
 
     parentContainer.removeChild(todayDayContainer);
 
-    const tonightContainer = document.querySelector(".childContainer");
+    const tonightContainer = document.getElementsByClassName(
+      "childContainer"
+    )[0];
     const containerWidth = "var(--containerWidth)";
     tonightContainer.style.maxWidth = containerWidth;
+  } else {
+    const containerWidth = "100%";
+    const containerMaxWidth = "var(--childContainerWidth)";
+    todayDayContainer.style.width = containerWidth;
+    todayDayContainer.nextElementSibling.style.width = containerWidth;
+    todayDayContainer.style.maxWidth = containerMaxWidth;
+    todayDayContainer.nextElementSibling.style.maxWidth = containerMaxWidth;
   }
 };
 
@@ -212,28 +283,8 @@ const countDayHourlyForecast = (forecastInfoHourly, forecastInfo) => {
   }
 };
 
-//clear all created containers and timeZone label
-const submitButton = document.querySelector(".submitButton");
-const inputCity = document.querySelector(".city");
-const inputState = document.querySelector(".state");
-submitButton.addEventListener("click", function () {
-  const all = document.querySelectorAll(".container, .subContainers");
-  const location = document.querySelector(".location");
-  location.remove();
-  for (const element of all) {
-    element.remove();
-  }
-  city = inputCity.value;
-  state = inputState.value;
-  if (city == "" || state == "") {
-    alert("Please input city and state");
-    window.location.reload();
-  }
-  initialLoad(city, state);
-});
-
-const divToggle = () => {
-  const containers = document.getElementsByClassName("clickable");
+function divToggle() {
+  const containers = Array.from(document.getElementsByClassName("clickable"));
   for (const each of containers) {
     each.addEventListener("click", function (event) {
       event.preventDefault();
@@ -244,4 +295,33 @@ const divToggle = () => {
       }
     });
   }
-};
+}
+
+//clear all created containers and timeZone label
+const submitButton = document.getElementsByClassName("submitButton")[0];
+const inputCity = document.getElementsByClassName("city")[0];
+const inputState = document.getElementsByClassName("state")[0];
+submitButton.addEventListener("click", function () {
+  const allContainers = Array.from(
+    document.getElementsByClassName("container")
+  );
+  const allSubContainers = Array.from(
+    document.getElementsByClassName("subContainers")
+  );
+  const location = document.getElementsByClassName("location")[0];
+
+  location.remove();
+  for (const i of allContainers) {
+    i.remove();
+  }
+  for (const j of allSubContainers) {
+    j.remove();
+  }
+  city = inputCity.value;
+  state = inputState.value;
+  if (city == "" || state == "") {
+    alert("Please input city and state");
+    window.location.reload();
+  }
+  initialLoad(city, state);
+});

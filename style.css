@@ -130,7 +130,6 @@ input {
 }
 
 #footeranchor {
-    padding-top: 2em;
     text-decoration: none;
     color: var(--sun);
 }
