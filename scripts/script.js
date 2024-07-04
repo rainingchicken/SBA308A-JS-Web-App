@@ -129,14 +129,19 @@ const initialLoad = async (city, state) => {
     forecastInfoHourly,
     forecastInfo
   );
-
-  let hourlyForecastSlots = [firstHourlyForecastSlots, 24, 24, 24, 24, 24, 24];
-  let slicedforecastInfoHourly = forecastInfoHourly.slice(
-    0,
-    hourlyForecastSlots.reduce((a, b) => a + b, 0)
-  );
-  //console.log(
-  //   firstHourlyForecastSlots,
+  let lastHourlyForecastSlots =
+    forecastInfoHourly.length - (firstHourlyForecastSlots + 5 * 24);
+  let hourlyForecastSlots = [
+    firstHourlyForecastSlots,
+    24,
+    24,
+    24,
+    24,
+    24,
+    lastHourlyForecastSlots,
+  ];
+  // console.log(
+  //   forecastInfoHourly.length,
   //   hourlyForecastSlots.reduce((a, b) => a + b, 0)
   // );
   const divContainers = Array.from(
@@ -151,8 +156,12 @@ const initialLoad = async (city, state) => {
   const hourlyContainers = Array.from(
     document.getElementsByClassName("hourlySlot")
   );
-  //console.log(forecastInfoHourly);
-  insertInfo(slicedforecastInfoHourly, hourlyContainers);
+  console.log(forecastInfoHourly);
+  // forecastsInfoHourly and subDivContainers need to have same length
+  insertInfo(
+    forecastInfoHourly,
+    hourlyContainers.splice(0, forecastInfoHourly.length)
+  );
   //console.log(forecastInfoHourly);
   divToggle();
 };
@@ -169,40 +178,22 @@ const insertInfo = (forecastType, containers) => {
     if (forecastType.length <= 14) {
       forecastDayName = forecastType[index].name;
     } else {
-      if (!Object.keys(forecastType[index].endTime || {})) {
-        theStartTime = forecastType[index].endTime;
-        //console.log(forecastType[index]);
-        //2024-07-09T04:00:00-05:00
-        time = Number(theStartTime.split("T")[1].slice(0, 2));
-        if (time == 13) {
-          time = `${time} PM`;
-        } else if (time == 1) {
-          time = `12 AM`;
-        } else if (time > 13) {
-          time = `${time - 1 - 12} PM`;
-        } else {
-          time = `${time - 1} AM`;
-        }
+      theStartTime = forecastType[index].startTime;
+      //console.log(forecastType[index]);
+      //2024-07-09T04:00:00-05:00
+      time = Number(theStartTime.split("T")[1].slice(0, 2));
+      if (time == 12) {
+        time = `${time} PM`;
+      } else if (time == 0) {
+        time = `12 AM`;
+      } else if (time > 12) {
+        time = `${time - 12} PM`;
       } else {
-        //it's running the else...
-        theStartTime = forecastType[index].startTime;
-        //console.log(forecastType[index]);
-        //2024-07-09T04:00:00-05:00
-        time = Number(theStartTime.split("T")[1].slice(0, 2));
-
-        if (time == 12) {
-          time = `${time} PM`;
-        } else if (time == 0) {
-          time = `12 AM`;
-        } else if (time > 12) {
-          time = `${time - 12} PM`;
-        } else {
-          time = `${time} AM`;
-        }
+        time = `${time} AM`;
       }
-      forecastDayName = time;
-      //console.log(forecastDayName);
     }
+    forecastDayName = time;
+    //console.log(forecastDayName);
 
     //const forecastDayName = forecastType[index].name;
 
