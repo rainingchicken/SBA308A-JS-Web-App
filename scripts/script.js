@@ -156,7 +156,7 @@ const initialLoad = async (city, state) => {
   const hourlyContainers = Array.from(
     document.getElementsByClassName("hourlySlot")
   );
-  console.log(forecastInfoHourly);
+  //console.log(forecastInfoHourly);
   // forecastsInfoHourly and subDivContainers need to have same length
   insertInfo(
     forecastInfoHourly,
@@ -191,8 +191,9 @@ const insertInfo = (forecastType, containers) => {
       } else {
         time = `${time} AM`;
       }
+      forecastDayName = time;
     }
-    forecastDayName = time;
+
     //console.log(forecastDayName);
 
     //const forecastDayName = forecastType[index].name;
